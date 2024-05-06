@@ -1,30 +1,55 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 class Program
 {
-    static void Main(string[] args)
+    static void Main()
     {
         List<int> numbers = new List<int>();
-
         Console.WriteLine("Enter a list of numbers, type 0 when finished.");
-        int number;
-        while ((number = int.Parse(Console.ReadLine()))!=0)
+
+        while (true)
         {
+            Console.Write("Enter number: ");
+            string input = Console.ReadLine();
+
+            if (!int.TryParse(input, out int number))
+            {
+                Console.WriteLine("Please enter a valid integer.");
+                continue;  // Skip further processing and restart the loop
+            }
+
+            if (number == 0)
+            {
+                break;  // Exit the loop if the user enters 0
+            }
             numbers.Add(number);
         }
 
-        int sum = 0;
-        foreach (int num in numbers)
+        if (numbers.Count > 0)
         {
-            sum += number;
+            int sum = numbers.Sum();
+            double average = numbers.Average();
+            int max = numbers.Max();
+            int? smallestPositive = numbers.Where(n => n > 0).Min();
+
+            numbers.Sort();
+
+            Console.WriteLine($"The sum is: {sum}");
+            Console.WriteLine($"The average is: {average}");
+            Console.WriteLine($"The largest number is: {max}");
+            Console.WriteLine($"The smallest positive number is: {smallestPositive ?? 0}"); // Safe access with null-coalescing operator
+
+            Console.WriteLine("The sorted list is:");
+            foreach (int num in numbers)
+            {
+                Console.WriteLine(num);
+            }
         }
-
-        double average = sum / (double)numbers.Count;
-
-        int largestNumber = numbers.Max();
-
-        Console.WriteLine("The sum is: {0}", sum);
-        Console.WriteLine("The average is: {0}", average);
-        Console.WriteLine("The largest number is: {0}", largestNumber);
+        else
+        {
+            Console.WriteLine("No numbers were entered.");
+        }
     }
 }
